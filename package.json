@@ -1,6 +1,6 @@
 {
   "name": "ts-odata-filter",
-  "version": "0.0.0",
+  "version": "0.0.5",
   "description": "",
   "keywords": [],
   "main": "dist/ts-odata-filter.umd.js",
@@ -9,10 +9,10 @@
   "files": [
     "dist"
   ],
-  "author": " <>",
+  "author": "Taras Tymchii",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Taras-Tymchiy/ts-odata-filter.git"
   },
   "license": "MIT",
   "engines": {
@@ -74,7 +74,6 @@
     "mapCoverage": true
   },
   "devDependencies": {
-    "@types/jasmine": "^2.8.1",
     "@types/jest": "^21.1.0",
     "@types/node": "^8.0.0",
     "colors": "^1.1.2",
