@@ -1,4 +1,4 @@
-import { ObjectPathProxy, ObjPathProxy } from './object-path-proxy';
+import { ObjPathProxy } from 'ts-object-path';
 import {
   IBasicFilterBuilder, ICollectionPropFilterBuilder,
   IFilterBuilderResult, IFilterExpressionResult,

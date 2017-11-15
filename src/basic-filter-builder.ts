@@ -1,5 +1,5 @@
 import { Type } from './types';
-import { ObjectPathProxy, ObjPathProxy } from './object-path-proxy';
+import { createProxy, getPath, isProxy, ObjPathProxy } from 'ts-object-path';
 import {
   IBasicFilterBuilder, ICollectionPropFilterBuilder,
   IFilterBuilderResult, IFilterExpressionResult,
@@ -33,8 +33,8 @@ export class BasicFilterBuilder<T> implements IBasicFilterBuilder<T> {
       const func = arg as BasicBuilderArgFunc<T, BasicFilterBuilder<T>, TResult>;
       arg = func(this, this.prop);
     }
-    if (ObjectPathProxy.isProxy<T, TResult>(arg)) {
-      return ObjectPathProxy.getPath(arg).join('/');
+    if (isProxy<T, TResult>(arg)) {
+      return getPath(arg).join('/');
     }
     if (arg instanceof FilterExpressionResult) {
       return arg.getString();
@@ -79,7 +79,7 @@ export class BasicFilterBuilder<T> implements IBasicFilterBuilder<T> {
 
   get prop() {
     const prefix = this.prefix ? [this.prefix] : [];
-    return ObjectPathProxy.create<T>(prefix);
+    return createProxy<T>(prefix);
   }
 
   protected collectionProp<I, TBuilder extends BasicFilterBuilder<I>>(prop: ObjPathProxy<T, Array<I>>, varName: string|null): ICollectionPropFilterBuilder<I, TBuilder> {
@@ -92,7 +92,7 @@ export class BasicFilterBuilder<T> implements IBasicFilterBuilder<T> {
     condition: BasicBuilderArg<I, TBuilder, boolean>
   ): FilterExpressionResult<T, boolean> {
     const polymorphicCtor = (this.constructor as any);
-    const prefix = ObjectPathProxy.getPath(prop).join('/');
+    const prefix = getPath(prop).join('/');
     const nestedBuilder: TBuilder = new polymorphicCtor(prefix);
     return new FilterExpressionResult<T, boolean>(nestedBuilder.getArgString(condition));
   }
@@ -116,7 +116,7 @@ class CollectionPropFilterBuilder<I, TBuilder extends BasicFilterBuilder<I>>
     }
 
     private collectionFunc(name: string, condition: BasicBuilderArgFunc<I, TBuilder, boolean>|null) {
-      const prefix = ObjectPathProxy.getPath(this.collectionProp).join('/');
+      const prefix = getPath(this.collectionProp).join('/');
       if (!condition) {
         return new FilterExpressionResult<I, boolean>(`${prefix}/${name}()`);
       }
@@ -127,7 +127,7 @@ class CollectionPropFilterBuilder<I, TBuilder extends BasicFilterBuilder<I>>
     }
 
     get count() {
-      const prefix = ObjectPathProxy.getPath(this.collectionProp).join('/');
+      const prefix = getPath(this.collectionProp).join('/');
       return new FilterExpressionResult<I, number>(`${prefix}/$count`);
     }
   }

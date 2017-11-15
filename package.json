@@ -1,6 +1,6 @@
 {
   "name": "ts-odata-filter",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "keywords": [],
   "main": "dist/ts-odata-filter.umd.js",
@@ -102,5 +102,8 @@
     "typedoc": "^0.9.0",
     "typescript": "^2.3.4",
     "validate-commit-msg": "^2.12.2"
+  },
+  "dependencies": {
+    "ts-object-path": "0.0.2"
   }
 }

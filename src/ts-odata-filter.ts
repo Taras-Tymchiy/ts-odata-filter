@@ -4,4 +4,3 @@
 export * from './types';
 export * from './basic-filter-builder';
 export * from './odata-filter-builder';
-export * from './object-path-proxy';
