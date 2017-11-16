@@ -43,7 +43,7 @@ export class BasicFilterBuilder<T> implements IBasicFilterBuilder<T> {
       return arg.toISOString();
     }
     if (typeof arg === 'string') {
-      return `'${arg}'`;
+      return `'${(arg as string).replace(/'/g, "''")}'`;
     }
     return JSON.stringify(arg);
   }

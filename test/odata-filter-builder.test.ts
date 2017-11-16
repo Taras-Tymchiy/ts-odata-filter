@@ -151,6 +151,17 @@ describe("ODataFilterBuilder string functions test", () => {
     })
 
   })
+
+  it("Escapes quotes", () => {
+
+    const f: FilterTest<IProduct> = {
+      filter: ({endswith}, p) => endswith(p.name, `IPhone 'X' `),
+      expectedResult: `endswith(name, 'IPhone ''X'' ')`
+    };
+
+    expect(ODataFilterBuilder.build(f.filter).getString()).toEqual(f.expectedResult)
+
+  })
 })
 
 describe("ODataFilterBuilder date functions test", () => {
@@ -294,3 +305,4 @@ describe("ODataFilterBuilder custom functions test", () => {
 
   })
 })
+
