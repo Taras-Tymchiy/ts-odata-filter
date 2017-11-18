@@ -104,6 +104,6 @@
     "validate-commit-msg": "^2.12.2"
   },
   "dependencies": {
-    "ts-object-path": "0.0.2"
+    "ts-object-path": "^0.1.1"
   }
 }
