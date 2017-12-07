@@ -1,8 +1,8 @@
 {
   "name": "ts-odata-filter",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "",
-  "keywords": [],
+  "keywords": ["odata", "filter", "builder", "typescript", "odata filter builder"],
   "main": "dist/ts-odata-filter.umd.js",
   "module": "dist/ts-odata-filter.es5.js",
   "typings": "dist/types/ts-odata-filter.d.ts",
