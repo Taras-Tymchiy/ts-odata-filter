@@ -8,7 +8,7 @@ import {
   BasicDynamicBuilderFunc,
   BasicDynamicBuilderArg,
   BasicDynamicBuilderArgFunc,
-  TDynamicPropType
+  BasicBuilderProp
 } from './dynamic-types'
 
 
@@ -36,11 +36,10 @@ export class BasicDynamicFilterBuilder implements IBasicDynamicFilterBuilder {
   protected constructor(protected prefix: string | null = null) {}
 
   getArgString<
-    TResult extends TDynamicPropType,
     TBuilder extends BasicDynamicFilterBuilder
-  >(arg: BasicDynamicBuilderArg<TBuilder, TResult>): string {
+  >(arg: BasicDynamicBuilderArg<TBuilder>): string {
     if (typeof arg === 'function') {
-      const func = arg as BasicDynamicBuilderArgFunc<BasicDynamicFilterBuilder, TResult>
+      const func = arg as BasicDynamicBuilderArgFunc<BasicDynamicFilterBuilder>
       arg = func(this, this.prop)
     }
 
@@ -60,9 +59,9 @@ export class BasicDynamicFilterBuilder implements IBasicDynamicFilterBuilder {
     return JSON.stringify(arg)
   }
 
-  function<TResult extends TDynamicPropType, TBuilder extends BasicDynamicFilterBuilder>(
+  function<TBuilder extends BasicDynamicFilterBuilder>(
     functionName: string,
-    ...args: BasicDynamicBuilderArg<TBuilder, TDynamicPropType>[]
+    ...args: BasicDynamicBuilderArg<TBuilder>[]
   ) {
     const argsString = args.map(a => this.getArgString(a)).join(', ')
     return new DynamicFilterExpressionResult(
@@ -71,12 +70,11 @@ export class BasicDynamicFilterBuilder implements IBasicDynamicFilterBuilder {
   }
 
   binaryOperator<
-    TArg extends TDynamicPropType,
     TBuilder extends BasicDynamicFilterBuilder
   >(
     op: string,
-    left: BasicDynamicBuilderArg<TBuilder, TArg>,
-    right: BasicDynamicBuilderArg<TBuilder, TArg>
+    left: BasicDynamicBuilderArg<TBuilder>,
+    right: BasicDynamicBuilderArg<TBuilder>
   ): DynamicFilterExpressionResult {
     const leftStr = this.getArgString(left)
     const rightStr = this.getArgString(right)
@@ -86,9 +84,8 @@ export class BasicDynamicFilterBuilder implements IBasicDynamicFilterBuilder {
   }
 
   protected logicalOperator<
-    TArg extends TDynamicPropType,
     TBuilder extends BasicDynamicFilterBuilder
-  >(op: string, ...args: BasicDynamicBuilderArg<TBuilder, TArg>[]) {
+  >(op: string, ...args: BasicDynamicBuilderArg<TBuilder>[]) {
     if (!args.length) {
       return new DynamicFilterExpressionResult(`true`)
     }
@@ -110,8 +107,8 @@ export class BasicDynamicFilterBuilder implements IBasicDynamicFilterBuilder {
   }
 
   protected nestedCondition<TBuilder extends BasicDynamicFilterBuilder>(
-    prop: ODataPropertyPath,
-    condition: BasicDynamicBuilderArg<TBuilder, ODataTypes.Bool>
+    prop: BasicBuilderProp<TBuilder>,
+    condition: BasicDynamicBuilderArg<TBuilder>
   ): DynamicFilterExpressionResult{
     const polymorphicCtor = this.constructor as any
     const prefix = prop.path
@@ -130,17 +127,17 @@ class DynamicCollectionPropFilterBuilder<TBuilder extends BasicDynamicFilterBuil
     private varName: string | null
   ) {}
 
-  any(condition: BasicDynamicBuilderArgFunc<TBuilder, ODataTypes.Bool> | null = null) {
+  any(condition: BasicDynamicBuilderArgFunc<TBuilder> | null = null) {
     return this.collectionFunc('any', condition)
   }
 
-  all(condition: BasicDynamicBuilderArgFunc<TBuilder, ODataTypes.Bool>) {
+  all(condition: BasicDynamicBuilderArgFunc<TBuilder>) {
     return this.collectionFunc('all', condition)
   }
 
   private collectionFunc(
     name: string,
-    condition: BasicDynamicBuilderArgFunc<TBuilder, ODataTypes.Bool> | null
+    condition: BasicDynamicBuilderArgFunc<TBuilder> | null
   ) {
     const prefix = this.collectionProp.path
     if (!condition) {

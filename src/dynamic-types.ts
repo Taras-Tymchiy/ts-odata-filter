@@ -33,39 +33,37 @@ export enum ODataTypes{
   Bool,
 }
 
-export type ODataDynamicTPrimitive = ODataTypes.Number | ODataTypes.String | ODataTypes.Date | ODataTypes.Bool;
-export type TDynamicPropType = ODataDynamicTPrimitive;
 
-//export type BasicBuilderProp<TBuilder extends IBasicFilterBuilder, TResult> = any;
+export type BasicBuilderProp<TBuilder extends IBasicDynamicFilterBuilder> = ODataPropertyPath;
 
-export type BasicDynamicBuilderArg<TBuilder extends IBasicDynamicFilterBuilder, TResult extends TDynamicPropType> =
-  BasicDynamicBuilderArgFunc<TBuilder, TResult> |
+export type BasicDynamicBuilderArg<TBuilder extends IBasicDynamicFilterBuilder> =
+  BasicDynamicBuilderArgFunc<TBuilder> |
   IDynamicFilterExpressionResult |
-  ODataPropertyPath |
-  TResult;
+  BasicBuilderProp<TBuilder> |
+  String | Number | Boolean | Date;
 
-export type BasicDynamicBuilderArgFunc<TBuilder extends IBasicDynamicFilterBuilder, TResult extends TDynamicPropType> =
-  (arg: TBuilder, props: any)=> BasicDynamicBuilderArg<TBuilder, TResult>;
+export type BasicDynamicBuilderArgFunc<TBuilder extends IBasicDynamicFilterBuilder> =
+  (arg: TBuilder, props: any)=> BasicDynamicBuilderArg<TBuilder>;
 
 export type BasicDynamicBuilderFunc<TBuilder extends IBasicDynamicFilterBuilder> =
-  BasicDynamicBuilderArgFunc<TBuilder, ODataTypes.Bool>;
+  BasicDynamicBuilderArgFunc<TBuilder>;
 
 export interface IDynamicCollectionPropFilterBuilder<TBuilder extends IBasicDynamicFilterBuilder> {
   count: IDynamicFilterExpressionResult;
-  any(condition?: BasicDynamicBuilderArgFunc<TBuilder, ODataTypes.Bool>): IDynamicFilterBuilderResult;
-  all(condition: BasicDynamicBuilderArgFunc<TBuilder, ODataTypes.Bool>): IDynamicFilterBuilderResult;
+  any(condition?: BasicDynamicBuilderArgFunc<TBuilder>): IDynamicFilterBuilderResult;
+  all(condition: BasicDynamicBuilderArgFunc<TBuilder>): IDynamicFilterBuilderResult;
 }
 
 export interface IBasicDynamicFilterBuilder {
-  prop: ODataPropertyPath;
+  prop: any;
   // collection: <I, TBuilder extends IBasicFilterBuilder<I>>(prop: ObjPathProxy<T, Array<I>>)=> ICollectionPropFilterBuilder<I, TBuilder>;
-  binaryOperator<TArg extends TDynamicPropType>(
+  binaryOperator(
     op: string,
-    left: BasicDynamicBuilderArg<IBasicDynamicFilterBuilder,TArg>,
-    right: BasicDynamicBuilderArg<IBasicDynamicFilterBuilder,TArg>
+    left: BasicDynamicBuilderArg<IBasicDynamicFilterBuilder>,
+    right: BasicDynamicBuilderArg<IBasicDynamicFilterBuilder>
   ): IDynamicFilterExpressionResult;
-  getArgString<TResult extends TDynamicPropType>(
-    arg: BasicDynamicBuilderArg<IBasicDynamicFilterBuilder, TResult>
+  getArgString(
+    arg: BasicDynamicBuilderArg<IBasicDynamicFilterBuilder>
   ): string
 }
 

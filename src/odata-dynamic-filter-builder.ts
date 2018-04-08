@@ -2,7 +2,6 @@ import {
   IBasicDynamicFilterBuilder, IDynamicCollectionPropFilterBuilder,
   IDynamicFilterBuilderResult, IDynamicFilterExpressionResult,
   BasicDynamicBuilderFunc, BasicDynamicBuilderArg, BasicDynamicBuilderArgFunc,
-  TDynamicPropType,
   ODataPropertyPath,
   ODataTypes
 } from './dynamic-types';
@@ -10,19 +9,19 @@ import { buildWithBuilder, BasicDynamicFilterBuilder, DynamicFilterExpressionRes
 
 export type BuilderFunc<T> = BasicDynamicBuilderFunc<ODataDynamicFilterBuilder>;
 
-export type BuilderArg<TResult extends TDynamicPropType> = BasicDynamicBuilderArg<ODataDynamicFilterBuilder, TResult>;
-export type BoolArg = BuilderArg<ODataTypes.Bool>;
-export type NumArg = BuilderArg<ODataTypes.Number>;
-export type StringArg = BuilderArg<ODataTypes.String>;
-export type DateArg = BuilderArg<ODataTypes.Date>;
+export type BuilderArg = BasicDynamicBuilderArg<ODataDynamicFilterBuilder>;
+export type BoolArg = BuilderArg;
+export type NumArg = BuilderArg;
+export type StringArg = BuilderArg;
+export type DateArg = BuilderArg;
 
 export type BoolResult = IDynamicFilterExpressionResult;
 export type StringResult = IDynamicFilterExpressionResult;
 export type NumResult = IDynamicFilterExpressionResult;
 export type DateResult = IDynamicFilterExpressionResult;
 
-export type Operator<T, TArg extends TDynamicPropType> =
-  (l: BuilderArg<TArg>, r: BuilderArg<TArg>) =>  BoolResult;
+export type Operator<T> =
+  (l: BuilderArg, r: BuilderArg) =>  BoolResult;
 
 export type StringFunc = (l: StringArg) => StringResult;
 export type StringFunc2 = (l: StringArg, r: StringArg) => StringResult;
@@ -46,7 +45,7 @@ export class ODataDynamicFilterBuilder extends BasicDynamicFilterBuilder {
 
   nested = (
     prop: ODataPropertyPath,
-    condition: BasicDynamicBuilderArg<ODataDynamicFilterBuilder, ODataTypes.Bool>
+    condition: BasicDynamicBuilderArg<ODataDynamicFilterBuilder>
   ): DynamicFilterExpressionResult => this.nestedCondition<ODataDynamicFilterBuilder>(prop, condition);
 
   // logical
@@ -55,17 +54,17 @@ export class ODataDynamicFilterBuilder extends BasicDynamicFilterBuilder {
   not = (arg: BoolArg): BoolResult => this.function('not', arg);
 
   // number operators
-  lt = <TArg extends TDynamicPropType>(l: BuilderArg<TArg>, r: BuilderArg<TArg>) =>
+  lt = (l: BuilderArg, r: BuilderArg) =>
     this.binaryOperator('lt', l, r); // less than
-  gt = <TArg extends TDynamicPropType>(l: BuilderArg<TArg>, r: BuilderArg<TArg>) =>
+  gt = (l: BuilderArg, r: BuilderArg) =>
     this.binaryOperator('gt', l, r); // greater than
-  le = <TArg extends TDynamicPropType>(l: BuilderArg<TArg>, r: BuilderArg<TArg>) =>
+  le = (l: BuilderArg, r: BuilderArg) =>
     this.binaryOperator('le', l, r); // less than or equals
-  ge = <TArg extends TDynamicPropType>(l: BuilderArg<TArg>, r: BuilderArg<TArg>) =>
+  ge = (l: BuilderArg, r: BuilderArg) =>
     this.binaryOperator('ge', l, r); // greater than or equals
-  eq = <TArg extends TDynamicPropType>(l: BuilderArg<TArg>, r: BuilderArg<TArg>) =>
+  eq = (l: BuilderArg, r: BuilderArg) =>
     this.binaryOperator('eq', l, r); // equals
-  ne = <TArg extends TDynamicPropType>(l: BuilderArg<TArg>, r: BuilderArg<TArg>) =>
+  ne = (l: BuilderArg, r: BuilderArg) =>
     this.binaryOperator('ne', l, r); // not equal
 
   // string functions
