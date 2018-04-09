@@ -2,11 +2,6 @@ export interface Type<T> {
   new (...args: any[]): T;
 }
 
-export class ODataEntityType
-{
-    name: string = '';
-    properties: ODataProperty[] = new Array<ODataProperty>();
-}
 
 export class ODataPropertyPath
 {
@@ -17,20 +12,6 @@ export class ODataPropertyPath
    {
      return new ODataPropertyPath(`${this.path}/${subPath}`);
    }
-}
-
-export class ODataProperty
-{
-    name: string = '';
-    type: ODataTypes = 0;
-    isNullable: boolean = false;
-}
-
-export enum ODataTypes{
-  Number,
-  String,
-  Date,
-  Bool,
 }
 
 

@@ -3,7 +3,6 @@ import {
   IDynamicFilterBuilderResult, IDynamicFilterExpressionResult,
   BasicDynamicBuilderFunc, BasicDynamicBuilderArg, BasicDynamicBuilderArgFunc,
   ODataPropertyPath,
-  ODataTypes
 } from './dynamic-types';
 import { buildWithBuilder, BasicDynamicFilterBuilder, DynamicFilterExpressionResult } from './basic-dynamic-filter-builder';
 

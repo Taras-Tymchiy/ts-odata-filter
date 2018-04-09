@@ -1,6 +1,6 @@
 import {
-  Type, ODataProperty, ODataPropertyPath,
-  ODataTypes,
+  Type, 
+  ODataPropertyPath,
   IBasicDynamicFilterBuilder,
   IDynamicCollectionPropFilterBuilder,
   IDynamicFilterBuilderResult,
